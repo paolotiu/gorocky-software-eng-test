@@ -10,6 +10,50 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Users {
+  id         String      @id @default(uuid()) @db.Uuid
+  email      String?     @db.Text
+  created_at DateTime    @default(now())
+  updated_at DateTime    @default(now()) @updatedAt
+  UserBooks  UserBooks[]
+}
+
+model Profiles {
+  username   String   @id @db.Text
+  full_name  String?  @db.Text
+  user_id    String   @db.Uuid
+  bio        String?  @db.Text
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+}
+
+model Book {
+  id          Int         @id @default(autoincrement())
+  title       String
+  author      String?
+  total_pages Int?
+  created_at  DateTime    @default(now())
+  updated_at  DateTime    @default(now()) @updatedAt
+  UserBooks   UserBooks[]
+}
+
+model UserBooks {
+  id          Int       @id @default(autoincrement())
+  user_id     String    @db.Uuid
+  book_id     Int
+  started_at  DateTime
+  finished_at DateTime?
+  review      String?   @db.Text
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @default(now()) @updatedAt
+
+  user Users @relation(fields: [user_id], references: [id])
+  book Book  @relation(fields: [book_id], references: [id])
+
+  @@unique([user_id, book_id])
 }
