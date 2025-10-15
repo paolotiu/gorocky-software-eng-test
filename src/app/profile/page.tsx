@@ -1,0 +1,20 @@
+import { redirect } from 'next/navigation';
+import { createClient } from '../../utils/supabase/server';
+import { Navbar } from '../components/navbar';
+
+export default async function PrivatePage() {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase.auth.getUser();
+
+  if (error || !data?.user) {
+    redirect('/login');
+  }
+
+  return (
+    <>
+      <Navbar />
+      <p>Hello {data.user.email}</p>;
+    </>
+  );
+}
