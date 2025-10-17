@@ -13,3 +13,5 @@ export const getBooks = () => {
     },
   });
 };
+
+export type GetBooksResult = Awaited<ReturnType<typeof getBooks>>;
