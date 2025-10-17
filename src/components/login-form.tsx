@@ -5,8 +5,8 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Field, FieldDescription, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import { supabaseClient } from '../utils/supabase/client';
-import { useState } from 'react';
+import { supabaseClient } from '../lib/supabase/client';
+import { useEffect, useState } from 'react';
 
 export function LoginForm({ className, ...props }: React.ComponentProps<'div'>) {
   const [email, setEmail] = useState('');
@@ -61,7 +61,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<'div'>) 
             <FieldDescription>{message}</FieldDescription>
           ) : (
             <Button
-              disabled={disabled}
+              disabled={email === '' || disabled}
               onClick={() => {
                 signInWithEmail();
               }}
