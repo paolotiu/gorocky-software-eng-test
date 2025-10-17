@@ -16,23 +16,27 @@ datasource db {
 }
 
 model Users {
-  id         String      @id @default(uuid()) @db.Uuid
-  email      String?     @db.Text
-  created_at DateTime    @default(now())
-  updated_at DateTime    @default(now()) @updatedAt
-  UserBooks  UserBooks[]
+  id         String    @id @default(uuid()) @db.Uuid
+  email      String?   @db.Text
+  created_at DateTime  @default(now())
+  updated_at DateTime  @default(now()) @updatedAt
+  profile    Profiles?
+
+  UserBooks UserBooks[]
 }
 
 model Profiles {
   username   String   @id @db.Text
   full_name  String?  @db.Text
-  user_id    String   @db.Uuid
   bio        String?  @db.Text
   created_at DateTime @default(now())
   updated_at DateTime @default(now()) @updatedAt
+
+  user_id String @unique @db.Uuid
+  user    Users  @relation(fields: [user_id], references: [id])
 }
 
-model Book {
+model Books {
   id          Int         @id @default(autoincrement())
   title       String
   author      String?
@@ -53,7 +57,7 @@ model UserBooks {
   updated_at  DateTime  @default(now()) @updatedAt
 
   user Users @relation(fields: [user_id], references: [id])
-  book Book  @relation(fields: [book_id], references: [id])
+  book Books @relation(fields: [book_id], references: [id])
 
   @@unique([user_id, book_id])
 }
