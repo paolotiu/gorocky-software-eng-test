@@ -10,6 +10,8 @@ export const getBook = async (id: number) => {
         select: {
           id: true,
           review: true,
+          started_at: true,
+          finished_at: true,
           user: {
             include: {
               profile: {

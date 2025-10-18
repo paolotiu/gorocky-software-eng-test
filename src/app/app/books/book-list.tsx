@@ -9,9 +9,10 @@ import fuzzysort from 'fuzzysort';
 
 type Props = {
   books: GetBooksResult;
+  userId: string;
 };
 
-const BookList = ({ books }: Props) => {
+const BookList = ({ books, userId }: Props) => {
   const [search, setSearch] = useState('');
 
   const results = search
@@ -35,20 +36,28 @@ const BookList = ({ books }: Props) => {
       </div>
 
       <section className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 ">
-        {results.map((book) => (
-          <Link
-            href={`/app/books/${book.id}`}
-            key={book.id}
-            className="border p-4 m-2 rounded active:ring-2"
-          >
-            <h3 className="font-bold">{book.title}</h3>
-            <p className="italic">{book.author}</p>
-            <p className="mt-2 text-sm text-gray-500">
-              {book._count.UserBooks} {book._count.UserBooks === 1 ? 'user' : 'users'} read this
-              book
-            </p>
-          </Link>
-        ))}
+        {results.map((book) => {
+          const readCount = book.UserBooks.filter((ub) => ub.finished_at).length;
+          const currentUserBook = book.UserBooks.find((ub) => ub.user_id === userId);
+          return (
+            <Link
+              href={`/app/books/${book.id}`}
+              key={book.id}
+              className="border p-4 m-2 rounded active:ring-2"
+            >
+              <div className="flex justify-between">
+                <h3 className="font-bold">{book.title} </h3>
+                <span className="text-xs text-gray-400">
+                  {currentUserBook ? (currentUserBook.finished_at ? 'Finished' : 'Reading') : ''}
+                </span>
+              </div>
+              <p className="italic">{book.author}</p>
+              <p className="mt-2 text-sm text-gray-500">
+                {readCount} {readCount === 1 ? 'user' : 'users'} read this book
+              </p>
+            </Link>
+          );
+        })}
       </section>
     </div>
   );

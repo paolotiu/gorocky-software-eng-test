@@ -5,9 +5,10 @@ export const getBooks = () => {
   // In the future we can add pagination, filtering, etc.
   return prisma.books.findMany({
     include: {
-      _count: {
+      UserBooks: {
         select: {
-          UserBooks: true,
+          user_id: true,
+          finished_at: true,
         },
       },
     },
