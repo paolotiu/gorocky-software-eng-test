@@ -73,6 +73,12 @@ Overall, this is a way for us to seamlessly integrate Supabase Auth with our Pri
 
 Enable RLS on all tables in the Supabase dashboard. Since we're using Prisma to interact with the database, we don't need to set up specific policies here.
 
+### Configure Auth
+
+In the Supabase dashboard, navigate to the "Authentication" settings and ensure that email sign-ups are enabled.
+
+Additionally, set the "Site URL" to match your development and production URLs (e.g., `http://localhost:3000` for local development).
+
 ### Run seed script to populate initial data
 
 ```bash
