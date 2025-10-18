@@ -4,6 +4,7 @@ import * as React from 'react';
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarHeader,
@@ -14,6 +15,7 @@ import {
 } from '@/components/ui/sidebar';
 import { usePathname, useRouter } from 'next/navigation';
 import Avatar from 'boring-avatars';
+import { supabaseClient } from '../lib/supabase/client';
 
 export const navData = {
   navMain: [
@@ -30,10 +32,12 @@ export function AppSidebar({
 }: React.ComponentProps<typeof Sidebar> & {
   user: {
     username: string;
-    booksReadCount: number;
+    booksReadingCount: number;
+    booksDoneReadingCount: number;
   };
 }) {
   const pathname = usePathname();
+  const router = useRouter();
 
   return (
     <Sidebar {...props}>
@@ -44,7 +48,11 @@ export function AppSidebar({
             <div className="text-sm font-medium"> {user.username || 'Guest'}</div>
           </div>
           <div className="text-xs text-muted-foreground">
-            You have read {user.booksReadCount} {user.booksReadCount === 1 ? 'book' : 'books'}
+            Currently reading {user.booksReadingCount} book{user.booksReadingCount > 1 ? 's' : ''}
+          </div>
+          <div className="text-xs text-muted-foreground">
+            Finished reading {user.booksDoneReadingCount} book
+            {user.booksDoneReadingCount > 1 ? 's' : ''}
           </div>
         </div>
       </SidebarHeader>
@@ -67,6 +75,16 @@ export function AppSidebar({
             </SidebarGroup>
           );
         })}
+        <SidebarFooter>
+          <SidebarMenuButton
+            onClick={async () => {
+              await supabaseClient.auth.signOut();
+              router.push('/login');
+            }}
+          >
+            Logout
+          </SidebarMenuButton>
+        </SidebarFooter>
       </SidebarContent>
       <SidebarRail />
     </Sidebar>

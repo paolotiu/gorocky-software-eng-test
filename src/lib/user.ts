@@ -3,7 +3,7 @@ import { cookies } from 'next/headers';
 import { clientEnv } from '@/env/client';
 import prisma from './prisma';
 
-export const getUser = async () => {
+export const getUser = async (params = { withUserBooks: false }) => {
   const cookiesStore = await cookies();
 
   const supabase = createServerClient(
@@ -22,7 +22,6 @@ export const getUser = async () => {
     data: { user: supabaseUser },
   } = await supabase.auth.getUser();
 
-  console.log('supabaseUser', supabaseUser);
   if (!supabaseUser) {
     return null;
   }
@@ -33,9 +32,7 @@ export const getUser = async () => {
     },
     include: {
       profile: true,
-      _count: {
-        select: { UserBooks: true },
-      },
+      UserBooks: params.withUserBooks,
     },
   });
 

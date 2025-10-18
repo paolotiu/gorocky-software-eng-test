@@ -2,9 +2,10 @@ import { AppSidebar } from '@/components/app-sidebar';
 import { SiteHeader } from '@/components/site-header';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import { getUser } from '../../lib/user';
+import { Toaster } from 'sonner';
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
-  const user = await getUser();
+  const user = await getUser({ withUserBooks: true });
 
   return (
     <SidebarProvider
@@ -17,7 +18,8 @@ export default async function AppLayout({ children }: { children: React.ReactNod
     >
       <AppSidebar
         user={{
-          booksReadCount: user?._count.UserBooks || 0,
+          booksDoneReadingCount: user?.UserBooks.filter((ub) => ub.finished_at).length || 0,
+          booksReadingCount: user?.UserBooks.filter((ub) => !ub.finished_at).length || 0,
           username: user?.profile?.username || '',
         }}
       />
@@ -25,6 +27,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         <SiteHeader />
         {children}
       </SidebarInset>
+      <Toaster />
     </SidebarProvider>
   );
 }

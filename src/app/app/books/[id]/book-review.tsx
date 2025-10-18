@@ -22,7 +22,6 @@ type Props = {
   };
 };
 
-
 export const BookReview = ({ initialUserBook }: Props) => {
   const [userBook, setUserBook] = useState(initialUserBook);
   const [debouncedUserBook] = useDebounce(userBook, 500);

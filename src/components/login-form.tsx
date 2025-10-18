@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Field, FieldDescription, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { supabaseClient } from '../lib/supabase/client';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 export function LoginForm({ className, ...props }: React.ComponentProps<'div'>) {
   const [email, setEmail] = useState('');
@@ -41,9 +41,9 @@ export function LoginForm({ className, ...props }: React.ComponentProps<'div'>) 
             <div className="flex size-8 items-center justify-center rounded-md">
               <GalleryVerticalEnd className="size-6" />
             </div>
-            <span className="sr-only">Acme Inc.</span>
+            <span className="sr-only">BookBuddy</span>
           </a>
-          <h1 className="text-xl font-bold">Welcome to Acme Inc.</h1>
+          <h1 className="text-xl font-bold">Welcome to BookBuddy</h1>
         </div>
         <Field>
           <FieldLabel htmlFor="email">Email</FieldLabel>
